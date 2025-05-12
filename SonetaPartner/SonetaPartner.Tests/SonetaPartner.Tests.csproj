@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Soneta.Sdk">
+  <PropertyGroup>
+    <TargetFramework>$(SonetaTargetFramework)</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="6.12.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Update="NUnit3TestAdapter" Version="4.6.0" />
+    <PackageReference Update="Soneta.Products.Test" Version="2504.1.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="HandelTest\Res\KSeFXmlPrzyklad.xml" />
+  </ItemGroup>
+</Project>
