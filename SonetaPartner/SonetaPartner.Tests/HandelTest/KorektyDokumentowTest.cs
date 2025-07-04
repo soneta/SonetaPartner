@@ -50,19 +50,19 @@ namespace SonetaPartner.Tests.HandelTest
 			kpz.Utwórz();
 
 			var obroty = wz.Build().Podrzędne[TypRelacjiHandlowej.KorektaPWZ].Obroty.ToArray<Obrot>();
-			Assert.AreEqual(2, obroty.Length);
-			Assert.AreEqual("KMMP", obroty[1].Przychod.Dokument.Definicja.Symbol);
-			Assert.AreEqual(2, obroty[1].Przychod.Dokument.Numer.Numer);
-			Assert.AreEqual("KWPZ", obroty[1].Rozchod.Dokument.Definicja.Symbol);
-			Assert.AreEqual(KorektaObrotu.Brak, obroty[1].Korekta);
+            Assert.That(obroty.Length, Is.EqualTo(2));
+            Assert.That(obroty[1].Przychod.Dokument.Definicja.Symbol, Is.EqualTo("KMMP"));
+            Assert.That(obroty[1].Przychod.Dokument.Numer.Numer, Is.EqualTo(2));
+            Assert.That(obroty[1].Rozchod.Dokument.Definicja.Symbol, Is.EqualTo("KWPZ"));
+            Assert.That(obroty[1].Korekta, Is.EqualTo(KorektaObrotu.Brak));
 
 			kpz.Bufor().Utwórz();
 
 			var obrot = wz.Build().ObrotyWszystkie[0] as Obrot;
-			Assert.AreEqual("MMP", obrot.Przychod.Dokument.Definicja.Symbol);
-			Assert.AreEqual(2, obrot.Przychod.Dokument.Numer.Numer);
-			Assert.AreEqual("WZ 2", obrot.Rozchod.Dokument.Definicja.Symbol);
-			Assert.AreEqual(0, Session.GetHandel().DokHandlowe.WgDefinicja[Get<DefDokHandlowego>("KWPZ").Build()].Count);
+            Assert.That(obrot.Przychod.Dokument.Definicja.Symbol, Is.EqualTo("MMP"));
+            Assert.That(obrot.Przychod.Dokument.Numer.Numer, Is.EqualTo(2));
+            Assert.That(obrot.Rozchod.Dokument.Definicja.Symbol, Is.EqualTo("WZ 2"));
+            Assert.That(Session.GetHandel().DokHandlowe.WgDefinicja[Get<DefDokHandlowego>("KWPZ").Build()].Count, Is.EqualTo(0));
 		}
 	}
 }

@@ -63,11 +63,11 @@ namespace SonetaPartner.Tests.HandelTest
 				.Utwórz();
 
 			var obroty = Session.GetMagazyny().Obroty.WgMagazyn.ToArray();
-			Assert.AreEqual(2, obroty.Length);
-			Assert.AreEqual("WZ 2", obroty[0].Rozchod.Dokument.Definicja.Symbol);
-			Assert.AreEqual("PW", obroty[0].Przychod.Dokument.Definicja.Symbol);
-			Assert.AreEqual("MMW", obroty[1].Rozchod.Dokument.Definicja.Symbol);
-			Assert.AreEqual("PZ 2", obroty[1].Przychod.Dokument.Definicja.Symbol);
+            Assert.That(obroty.Length, Is.EqualTo(2));
+            Assert.That(obroty[0].Rozchod.Dokument.Definicja.Symbol, Is.EqualTo("WZ 2"));
+            Assert.That(obroty[0].Przychod.Dokument.Definicja.Symbol, Is.EqualTo("PW"));
+            Assert.That(obroty[1].Rozchod.Dokument.Definicja.Symbol, Is.EqualTo("MMW"));
+            Assert.That(obroty[1].Przychod.Dokument.Definicja.Symbol, Is.EqualTo("PZ 2"));
 		}
 	}
 }

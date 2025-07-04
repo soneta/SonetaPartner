@@ -21,8 +21,8 @@ namespace SonetaPartner.Tests.Konferencja
 		public void SrodekTrwalu_Test()
 		{
 
-			Assert.IsTrue(Session.GetSrodkiTrwale()
-				.SrodkiTrwale.Rows.Count() == 0);
+            Assert.That(Session.GetSrodkiTrwale()
+                .SrodkiTrwale.Rows.Count() == 0, Is.True);
 
 			InTransaction(() =>
 			{
@@ -35,15 +35,15 @@ namespace SonetaPartner.Tests.Konferencja
 
 			});
 
-			Assert.IsTrue(Session.GetSrodkiTrwale()
-				.SrodkiTrwale.Rows.Count() == 1);
+            Assert.That(Session.GetSrodkiTrwale()
+                .SrodkiTrwale.Rows.Count() == 1, Is.True);
 
-			Assert.IsTrue(Session.GetSrodkiTrwale()
-				.SrodkiTrwale.WgNumeruInwentarzowego["1"] != null);
+            Assert.That(Session.GetSrodkiTrwale()
+                .SrodkiTrwale.WgNumeruInwentarzowego["1"] != null, Is.True);
 
 
-			Assert.IsTrue(Session.GetSrodkiTrwale()
-				.SrodkiTrwale.WgNumeruInwentarzowego["2"] == null);
+            Assert.That(Session.GetSrodkiTrwale()
+                .SrodkiTrwale.WgNumeruInwentarzowego["2"] == null, Is.True);
 		}
 
 		[Test]
@@ -52,7 +52,7 @@ namespace SonetaPartner.Tests.Konferencja
 			var fv = Session.GetHandel().DokHandlowe
 				.WgDefinicja[Session.GetHandel().DefDokHandlowych.WgSymbolu["FV"]].ToArray();
 
-			Assert.IsTrue(fv.Count() == 0);
+            Assert.That(fv.Count() == 0, Is.True);
 
 			InTransaction(() =>
 			{
@@ -73,7 +73,7 @@ namespace SonetaPartner.Tests.Konferencja
 			fv = Session.GetHandel().DokHandlowe
 				.WgDefinicja[Session.GetHandel().DefDokHandlowych.WgSymbolu["FV"]].ToArray();
 
-			Assert.IsTrue(fv.Count() == 1);
+            Assert.That(fv.Count() == 1, Is.True);
 		}
 	}
 }

@@ -283,8 +283,8 @@ namespace SonetaPartner.Tests.HandelTest
 			   .Zatwierdz()
 			   .Utwórz(cx => cx.Set(new PrzecenyOkresoweParams(cx)));
 
-			Assert.True(przecenaOgolnaBuilder.Zatwierdzona);
-			Assert.AreEqual(1, przecenaOgolnaBuilder.PrzecenyTowarow.Count);
+            Assert.That(przecenaOgolnaBuilder.Zatwierdzona, Is.True);
+            Assert.That(przecenaOgolnaBuilder.PrzecenyTowarow.Count, Is.EqualTo(1));
 		}
 
 		private void FakturaZakupuUtworz()

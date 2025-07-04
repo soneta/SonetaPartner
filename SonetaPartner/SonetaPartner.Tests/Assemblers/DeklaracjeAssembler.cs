@@ -37,9 +37,9 @@ namespace SonetaPartner.Tests.Assemblers
 		{
 			return builder.Enqueue((d, ctx) => {
 				string[] ss = pole.Split('.');
-				Assert.AreEqual(ss.Length, 2, "Oczekiwana wartość postaci BLOK.POLE");
+                Assert.That(2, Is.EqualTo(ss.Length), "Oczekiwana wartość postaci BLOK.POLE");
 				W wartość = (W)d.Bloki[ss[0]][ss[1]];
-				Assert.AreEqual(wymagana, wartość, "{0}, deklaracja '{1}/{2}', pole '{3}'.", opis, d.Podmiot, Root(d), pole);
+                Assert.That(wartość, Is.EqualTo(wymagana), $"{opis}, deklaracja '{d.Podmiot}/{Root(d)}', pole '{pole}'.");
 			});
 		}
 

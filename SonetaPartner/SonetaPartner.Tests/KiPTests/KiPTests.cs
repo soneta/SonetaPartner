@@ -47,7 +47,7 @@ namespace SonetaPartner.Tests.KiPTests
             .Enqueue((c, ctx) =>
             {
                 var kadry = ctx.Session.Get<KadryModule>();
-                Assert.AreEqual(kod, kadry.Pracownicy.WgNazwiska["Test123456"].First().Kod);
+                Assert.That(kadry.Pracownicy.WgNazwiska["Test123456"].First().Kod, Is.EqualTo(kod));
             })
             .Utwórz();
         }
@@ -134,9 +134,9 @@ namespace SonetaPartner.Tests.KiPTests
             NowyTest()
             .Pracownik("001")
             .NowyPIT<PIT11_25>(2019)
-                .Enqueue(_ => Assert.IsTrue(_.Okres == FromTo.Parse("2019-1-1...2019-9-30"), _.Okres.ToString()))
-                .Enqueue(_ => Assert.AreEqual(_.NumerFormularza, 1))
-                .Enqueue(_ => Assert.AreEqual(_.CelZłożenia, PIT.CelZłożenia.ZłożenieFormularza))
+                .Enqueue(_ => Assert.That(_.Okres == FromTo.Parse("2019-1-1...2019-9-30"), Is.True, _.Okres.ToString()))
+                .Enqueue(_ => Assert.That(1, Is.EqualTo(_.NumerFormularza)))
+                .Enqueue(_ => Assert.That(_.CelZłożenia, Is.EqualTo(PIT.CelZłożenia.ZłożenieFormularza)))
                 .SprawdzPole("E.1aPrzychód", 5000m)
                 .Return()
             .Utwórz();
@@ -144,9 +144,9 @@ namespace SonetaPartner.Tests.KiPTests
             NowyTest()
             .Pracownik("001")
             .NowyPIT<PIT11_25>(2019)
-                .Enqueue(_ => Assert.IsTrue(_.Okres == FromTo.Parse("2019-1-1...2019-9-30"), _.Okres.ToString()))
-                .Enqueue(_ => Assert.AreEqual(_.NumerFormularza, 1))
-                .Enqueue(_ => Assert.AreEqual(_.CelZłożenia, PIT.CelZłożenia.KorektaFormularza))
+                .Enqueue(_ => Assert.That(_.Okres == FromTo.Parse("2019-1-1...2019-9-30"), Is.True, _.Okres.ToString()))
+                .Enqueue(_ => Assert.That(1, Is.EqualTo(_.NumerFormularza)))
+                .Enqueue(_ => Assert.That(_.CelZłożenia, Is.EqualTo(PIT.CelZłożenia.KorektaFormularza)))
                 .SprawdzPole("E.1aPrzychód", 5000m)
                 .Return()
             .Build();
@@ -162,7 +162,7 @@ namespace SonetaPartner.Tests.KiPTests
                     TypUmowyOPrace(TypUmowyOPrace.NaOkresPróbny).
                     Enqueue(ph => {
                         ph.Etat.OkresWypowiedzenia.DataZlozenia = DateTime.Parse("2016-5-2");
-                        Assert.AreEqual(3, ph.Etat.OkresWypowiedzenia.Dni);
+                        Assert.That(ph.Etat.OkresWypowiedzenia.Dni, Is.EqualTo(3));
                     }).
             Utwórz();
         }

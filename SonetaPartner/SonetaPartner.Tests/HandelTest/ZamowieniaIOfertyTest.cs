@@ -55,22 +55,22 @@ namespace SonetaPartner.Tests.HandelTest
 				.Zatwierdz()
 				.Utwórz();
 
-			Assert.AreEqual(1, zd.Pozycje.Count());
-			Assert.AreEqual(45d, zd.PozycjaWgIdent(1).Ilosc.Value);
+            Assert.That(zd.Pozycje.Count(), Is.EqualTo(1));
+            Assert.That(zd.PozycjaWgIdent(1).Ilosc.Value, Is.EqualTo(45d));
 
 			zo1 = zo1Builder.Build();
 			zo2 = zo2Builder.Build();
 
-			Assert.AreEqual(1, zo1.Zasoby.Count);
-			Assert.AreEqual(1, zo2.Zasoby.Count);
+            Assert.That(zo1.Zasoby.Count, Is.EqualTo(1));
+            Assert.That(zo2.Zasoby.Count, Is.EqualTo(1));
 
 			var zasob = zo1.Zasoby.GetFirst() as Zasob;
-			Assert.AreEqual(30d, zasob.Ilosc.Value);
-			Assert.AreEqual(zd.NumerPelnyZapisany, zasob.Nadrzedny.Partia.Dokument.NumerPelnyZapisany);
+            Assert.That(zasob.Ilosc.Value, Is.EqualTo(30d));
+            Assert.That(zasob.Nadrzedny.Partia.Dokument.NumerPelnyZapisany, Is.EqualTo(zd.NumerPelnyZapisany));
 
 			zasob = zo2.Zasoby.GetFirst() as Zasob;
-			Assert.AreEqual(30d, zasob.Ilosc.Value);
-			Assert.IsNull(zasob.Nadrzedny);
+            Assert.That(zasob.Ilosc.Value, Is.EqualTo(30d));
+            Assert.That(zasob.Nadrzedny, Is.Null);
 
 			var zk = DokumentHandlowyAssembler.NowyWRelacji(zd, "ZK", new HandlerSet()
 			{
@@ -86,17 +86,17 @@ namespace SonetaPartner.Tests.HandelTest
 
 			var zasobyZO = Session.GetMagazyny().Zasoby.Cast<Zasob>().Where(x => x.Partia.Dokument.Definicja.Symbol == "ZO").ToArray();
 
-			Assert.AreEqual(2, zasobyZO.Count());
+            Assert.That(zasobyZO.Count(), Is.EqualTo(2));
 
 			zasob = zasobyZO.Where(x => x.Partia.Dokument.NumerPelnyZapisany == zo1.NumerPelnyZapisany).FirstOrDefault();
-			Assert.IsNotNull(zasob);
-			Assert.AreEqual(30d, zasob.Ilosc.Value);
-			Assert.AreEqual(zk.Podrzędne[TypRelacjiHandlowej.HandlowoMagazynowa].NumerPelnyZapisany, zasob.Nadrzedny.Partia.Dokument.NumerPelnyZapisany);
+            Assert.That(zasob, Is.Not.Null);
+            Assert.That(zasob.Ilosc.Value, Is.EqualTo(30d));
+            Assert.That(zasob.Nadrzedny.Partia.Dokument.NumerPelnyZapisany, Is.EqualTo(zk.Podrzędne[TypRelacjiHandlowej.HandlowoMagazynowa].NumerPelnyZapisany));
 
 			zasob = zasobyZO.Where(x => x.Partia.Dokument.NumerPelnyZapisany == zo2.NumerPelnyZapisany).FirstOrDefault();
-			Assert.IsNotNull(zasob);
-			Assert.AreEqual(30d, zasob.Ilosc.Value);
-			Assert.IsNull(zasob.Nadrzedny);
+            Assert.That(zasob, Is.Not.Null);
+            Assert.That(zasob.Ilosc.Value, Is.EqualTo(30d));
+            Assert.That(zasob.Nadrzedny, Is.Null);
 
 			DokumentHandlowyAssembler.NoweWRelacji(new[] { zo1Builder, zo2Builder }, "FV", new HandlerSet()
 			{
@@ -113,18 +113,18 @@ namespace SonetaPartner.Tests.HandelTest
 			var fv2Builder = GetBuilderOf<DokumentHandlowy>(handel.DokHandlowe.WgDefinicja[handel.DefDokHandlowych.WgSymbolu["FV"]].ElementAt(1).Guid).Zatwierdz();
 			var fv2 = fv2Builder.Utwórz();
 
-			Assert.AreEqual(30d, fv1.PozycjaWgIdent(1).Ilosc.Value);
-			Assert.AreEqual(30d, fv2.PozycjaWgIdent(1).Ilosc.Value);
+            Assert.That(fv1.PozycjaWgIdent(1).Ilosc.Value, Is.EqualTo(30d));
+            Assert.That(fv2.PozycjaWgIdent(1).Ilosc.Value, Is.EqualTo(30d));
 
-			Assert.AreEqual(1, fv1.Podrzędne[TypRelacjiHandlowej.HandlowoMagazynowa].PozycjaWgIdent(1).Obroty.Count);
+            Assert.That(fv1.Podrzędne[TypRelacjiHandlowej.HandlowoMagazynowa].PozycjaWgIdent(1).Obroty.Count, Is.EqualTo(1));
 			var obrot = fv1.Podrzędne[TypRelacjiHandlowej.HandlowoMagazynowa].PozycjaWgIdent(1).Obroty.GetFirst() as Obrot;
-			Assert.AreEqual(30d, obrot.Ilosc.Value);
-			Assert.AreEqual(zk.Podrzędne[TypRelacjiHandlowej.HandlowoMagazynowa].NumerPelnyZapisany, obrot.Przychod.Dokument.NumerPelnyZapisany);
+            Assert.That(obrot.Ilosc.Value, Is.EqualTo(30d));
+            Assert.That(obrot.Przychod.Dokument.NumerPelnyZapisany, Is.EqualTo(zk.Podrzędne[TypRelacjiHandlowej.HandlowoMagazynowa].NumerPelnyZapisany));
 
-			Assert.AreEqual(1, fv2.Podrzędne[TypRelacjiHandlowej.HandlowoMagazynowa].PozycjaWgIdent(1).Obroty.Count);
+            Assert.That(fv2.Podrzędne[TypRelacjiHandlowej.HandlowoMagazynowa].PozycjaWgIdent(1).Obroty.Count, Is.EqualTo(1));
 			obrot = fv2.Podrzędne[TypRelacjiHandlowej.HandlowoMagazynowa].PozycjaWgIdent(1).Obroty.GetFirst() as Obrot;
-			Assert.AreEqual(30d, obrot.Ilosc.Value);
-			Assert.AreEqual(pz.NumerPelnyZapisany, obrot.Przychod.Dokument.NumerPelnyZapisany);
+            Assert.That(obrot.Ilosc.Value, Is.EqualTo(30d));
+            Assert.That(obrot.Przychod.Dokument.NumerPelnyZapisany, Is.EqualTo(pz.NumerPelnyZapisany));
 
 			fv2Builder
 				.Bufor()
@@ -138,17 +138,17 @@ namespace SonetaPartner.Tests.HandelTest
 
 			zasobyZO = Session.GetMagazyny().Zasoby.Cast<Zasob>().Where(x => x.Partia.Dokument.Definicja.Symbol == "ZO").ToArray();
 
-			Assert.AreEqual(2, zasobyZO.Count());
+            Assert.That(zasobyZO.Count(), Is.EqualTo(2));
 
 			zasob = zasobyZO.Where(x => x.Partia.Dokument.NumerPelnyZapisany == zo1.NumerPelnyZapisany).FirstOrDefault();
-			Assert.IsNotNull(zasob);
-			Assert.AreEqual(30d, zasob.Ilosc.Value);
-			Assert.AreEqual(zk.Podrzędne[TypRelacjiHandlowej.HandlowoMagazynowa].NumerPelnyZapisany, zasob.Nadrzedny.Partia.Dokument.NumerPelnyZapisany);
+            Assert.That(zasob, Is.Not.Null);
+            Assert.That(zasob.Ilosc.Value, Is.EqualTo(30d));
+            Assert.That(zasob.Nadrzedny.Partia.Dokument.NumerPelnyZapisany, Is.EqualTo(zk.Podrzędne[TypRelacjiHandlowej.HandlowoMagazynowa].NumerPelnyZapisany));
 
 			zasob = zasobyZO.Where(x => x.Partia.Dokument.NumerPelnyZapisany == zo2.NumerPelnyZapisany).FirstOrDefault();
-			Assert.IsNotNull(zasob);
-			Assert.AreEqual(30d, zasob.Ilosc.Value);
-			Assert.IsNull(zasob.Nadrzedny);
+            Assert.That(zasob, Is.Not.Null);
+            Assert.That(zasob.Ilosc.Value, Is.EqualTo(30d));
+            Assert.That(zasob.Nadrzedny, Is.Null);
 		}
 	}
 }

@@ -57,7 +57,7 @@ namespace SonetaPartner.Tests.Assemblers
         static public IRowBuilder<Pracownik> SprawdzStazPracy(this IRowBuilder<Pracownik> builder, string _data, string _staż, RodzajPodstawyStażuPracy rodzaj = RodzajPodstawyStażuPracy.StazPracy)
             => builder.Enqueue(p => {
                 var current = p.StażPracy(Date.Parse(_data), rodzaj);
-                Assert.AreEqual(StazPracy.Parse(_staż), current, $"Staż pracy na dzień '{_data}'.");
+                Assert.That(current, Is.EqualTo(StazPracy.Parse(_staż)), $"Staż pracy na dzień '{_data}'.");
             });
 
     }

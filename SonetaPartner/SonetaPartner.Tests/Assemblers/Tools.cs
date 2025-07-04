@@ -17,7 +17,7 @@ namespace SonetaPartner.Tests.Assemblers
             if (nazwa == null)
                 throw new ArgumentNullException();
             var e = session.Session.GetPlace().DefElementow.WgNazwy[nazwa];
-            Assert.NotNull(e, $"Nie znaleziono definicji elemetu wynagrodzenia '{nazwa}'.");
+            Assert.That(e, Is.Not.Null, $"Nie znaleziono definicji elemetu wynagrodzenia '{nazwa}'.");
             return e;
         }
     }

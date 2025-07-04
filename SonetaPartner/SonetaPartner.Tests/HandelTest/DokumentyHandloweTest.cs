@@ -56,15 +56,15 @@ namespace SonetaPartner.Tests.HandelTest
 				.Zatwierdz();
 			wz2.Utwórz(cx => cx.Set("WZ 2", kontrahent: "ABC"));
 			var worker = new ParametryLimituKredytowegoWorker { Podmiot = CRMModule.GetInstance(Session).Kontrahenci.WgKodu["Abc"] };
-			Assert.AreEqual(200.00, worker.Dostępny.Value);
+            Assert.That(worker.Dostępny.Value, Is.EqualTo(200.00));
 			var fv2 = DokumentHandlowyAssembler
 					  .NowyWRelacji(wz2.Build(), "FV 2")
 					  .Kontrahent("Abc")
 					  .Zatwierdz()
 					  .Utwórz();
-			Assert.AreEqual(false, fv2.Bufor);
+            Assert.That(fv2.Bufor, Is.EqualTo(false));
 			var worker_after = new ParametryLimituKredytowegoWorker { Podmiot = CRMModule.GetInstance(Session).Kontrahenci.WgKodu["Abc"] };
-			Assert.AreEqual(200.00, worker_after.Dostępny.Value);
+            Assert.That(worker_after.Dostępny.Value, Is.EqualTo(200.00));
 		}
 
 		[Test]
@@ -114,8 +114,8 @@ namespace SonetaPartner.Tests.HandelTest
 			var pozycje = fv.Pozycje.Cast<PozycjaDokHandlowego>().ToArray();
 
 			var zaliczki = fv.DokumentyZaliczkowe.Cast<DokumentHandlowy>().Select(d => d.BruttoCy.Value).Sum();
-			Assert.AreEqual(780.00d, fv.BruttoCy.Value);
-			Assert.AreEqual(450.00d, zaliczki);
+            Assert.That(fv.BruttoCy.Value, Is.EqualTo(780.00d));
+            Assert.That(zaliczki, Is.EqualTo(450.00d));
 		}
 
 		[Test]
@@ -165,8 +165,8 @@ namespace SonetaPartner.Tests.HandelTest
 			var pozycje = fv.Pozycje.Cast<PozycjaDokHandlowego>().ToArray();
 
 			var zaliczki = fv.DokumentyZaliczkowe.Cast<DokumentHandlowy>().Select(d => d.BruttoCy.Value).Sum();
-			Assert.AreEqual(780.00d, fv.BruttoCy.Value);
-			Assert.AreEqual(450.00d, zaliczki);
+            Assert.That(fv.BruttoCy.Value, Is.EqualTo(780.00d));
+            Assert.That(zaliczki, Is.EqualTo(450.00d));
 		}
 	}
 }

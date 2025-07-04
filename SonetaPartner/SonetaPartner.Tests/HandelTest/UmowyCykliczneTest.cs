@@ -79,13 +79,13 @@ namespace SonetaPartner.Tests.HandelTest
 			.Zatwierdz()
 			.Utwórz();
 
-			Assert.AreEqual(1, fv.Pozycje.Count);
-			Assert.AreEqual(3d, fv.PozycjaWgIdent(1).Ilosc.Value);
-			Assert.AreEqual(100d, fv.PozycjaWgIdent(1).Cena.Value);
-			Assert.AreEqual(new Percent(.0m), fv.PozycjaWgIdent(1).Rabat);
-			Assert.AreEqual(300m, fv.Suma.Netto);
-			Assert.AreEqual(new FromTo(new Date(2023, 12, 1), new Date(2024, 2, 29)), fv.Okres);
-			Assert.AreEqual(new FromTo(new Date(2023, 12, 1), new Date(2024, 2, 29)), fv.PozycjaWgIdent(1).OkresRozliczony);
+            Assert.That(fv.Pozycje.Count, Is.EqualTo(1));
+            Assert.That(fv.PozycjaWgIdent(1).Ilosc.Value, Is.EqualTo(3d));
+            Assert.That(fv.PozycjaWgIdent(1).Cena.Value, Is.EqualTo(100d));
+            Assert.That(fv.PozycjaWgIdent(1).Rabat, Is.EqualTo(new Percent(.0m)));
+            Assert.That(fv.Suma.Netto, Is.EqualTo(300m));
+            Assert.That(fv.Okres, Is.EqualTo(new FromTo(new Date(2023, 12, 1), new Date(2024, 2, 29))));
+            Assert.That(fv.PozycjaWgIdent(1).OkresRozliczony, Is.EqualTo(new FromTo(new Date(2023, 12, 1), new Date(2024, 2, 29))));
 
 			var aucBuilder = DokumentHandlowyAssembler.Korekta(uc)
 				.Data(new Date(2024, 4, 1))
@@ -110,13 +110,13 @@ namespace SonetaPartner.Tests.HandelTest
 			.Zatwierdz()
 			.Utwórz();
 
-			Assert.AreEqual(1, fv.Pozycje.Count);
-			Assert.AreEqual(1d, fv.PozycjaWgIdent(1).Ilosc.Value);
-			Assert.AreEqual(100d, fv.PozycjaWgIdent(1).Cena.Value);
-			Assert.AreEqual(new Percent(.0m), fv.PozycjaWgIdent(1).Rabat);
-			Assert.AreEqual(100m, fv.Suma.Netto);
-			Assert.AreEqual(new FromTo(new Date(2024, 3, 1), new Date(2024, 3, 31)), fv.Okres);
-			Assert.AreEqual(new FromTo(new Date(2024, 3, 1), new Date(2024, 3, 31)), fv.PozycjaWgIdent(1).OkresRozliczony);
+            Assert.That(fv.Pozycje.Count, Is.EqualTo(1));
+            Assert.That(fv.PozycjaWgIdent(1).Ilosc.Value, Is.EqualTo(1d));
+            Assert.That(fv.PozycjaWgIdent(1).Cena.Value, Is.EqualTo(100d));
+            Assert.That(fv.PozycjaWgIdent(1).Rabat, Is.EqualTo(new Percent(.0m)));
+            Assert.That(fv.Suma.Netto, Is.EqualTo(100m));
+            Assert.That(fv.Okres, Is.EqualTo(new FromTo(new Date(2024, 3, 1), new Date(2024, 3, 31))));
+            Assert.That(fv.PozycjaWgIdent(1).OkresRozliczony, Is.EqualTo(new FromTo(new Date(2024, 3, 1), new Date(2024, 3, 31))));
 
 			auc = aucBuilder.Utwórz();
 
@@ -135,13 +135,13 @@ namespace SonetaPartner.Tests.HandelTest
 			.Zatwierdz()
 			.Utwórz();
 
-			Assert.AreEqual(1, fv.Pozycje.Count);
-			Assert.AreEqual(2d, fv.PozycjaWgIdent(1).Ilosc.Value);
-			Assert.AreEqual(200d, fv.PozycjaWgIdent(1).Cena.Value);
-			Assert.AreEqual(new Percent(.0m), fv.PozycjaWgIdent(1).Rabat);
-			Assert.AreEqual(400m, fv.Suma.Netto);
-			Assert.AreEqual(new FromTo(new Date(2024, 4, 1), new Date(2024, 5, 31)), fv.Okres);
-			Assert.AreEqual(new FromTo(new Date(2024, 4, 1), new Date(2024, 5, 31)), fv.PozycjaWgIdent(1).OkresRozliczony);
+            Assert.That(fv.Pozycje.Count, Is.EqualTo(1));
+            Assert.That(fv.PozycjaWgIdent(1).Ilosc.Value, Is.EqualTo(2d));
+            Assert.That(fv.PozycjaWgIdent(1).Cena.Value, Is.EqualTo(200d));
+            Assert.That(fv.PozycjaWgIdent(1).Rabat, Is.EqualTo(new Percent(.0m)));
+            Assert.That(fv.Suma.Netto, Is.EqualTo(400m));
+            Assert.That(fv.Okres, Is.EqualTo(new FromTo(new Date(2024, 4, 1), new Date(2024, 5, 31))));
+            Assert.That(fv.PozycjaWgIdent(1).OkresRozliczony, Is.EqualTo(new FromTo(new Date(2024, 4, 1), new Date(2024, 5, 31))));
 		}
 	}
 }

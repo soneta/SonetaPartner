@@ -59,13 +59,13 @@ namespace SonetaPartner.Tests.HandelTest
 			var fvBuilder = DokumentHandlowyAssembler.NowyWRelacji(wz, "FV 2");
 			var fv = fvBuilder.Utwórz();
 
-			Assert.AreEqual(1, fv.Pozycje.Count);
+            Assert.That(fv.Pozycje.Count, Is.EqualTo(1));
 
 			var handlers = new HandlerSet
 			{
 				WybierzDokumentyCallback = p =>
 				{
-					Assert.AreEqual(1, p.Dokumenty.Count);
+                    Assert.That(p.Dokumenty.Count, Is.EqualTo(1));
 					p.DokumentyWybrane = p.Dokumenty.Cast<DokumentHandlowy>().ToArray();
 				}
 			};
@@ -74,8 +74,8 @@ namespace SonetaPartner.Tests.HandelTest
 				.Zatwierdz()
 				.Utwórz();
 
-			Assert.AreEqual(2, fv.Pozycje.Count);
-			Assert.AreEqual(1, fv.ZaliczkiRelacje.Count);
+            Assert.That(fv.Pozycje.Count, Is.EqualTo(2));
+            Assert.That(fv.ZaliczkiRelacje.Count, Is.EqualTo(1));
 		}
 	}
 }

@@ -66,16 +66,16 @@ namespace SonetaPartner.Tests.CRMTests
             InUITransaction(() =>
             {
                 var contractor = Session.GetCRM().Kontrahenci.WgKodu["Abc"];
-                Assert.IsNotNull(contractor, "Nie odnaleziono kontrahenta Abc");
+                Assert.That(contractor, Is.Not.Null, "Nie odnaleziono kontrahenta Abc");
 
                 var representative = Session.GetCRM().KontaktyOsoby.WgKontrahent[contractor].FirstOrDefault();
-                Assert.IsNotNull(representative, "Nie odnaleziono przedstawiciela Paszyński");
+                Assert.That(representative, Is.Not.Null, "Nie odnaleziono przedstawiciela Paszyński");
 
                 var taskLeader = Session.GetBusiness().Operators.ByName["Administrator"];
-                Assert.IsNotNull(taskLeader, "Nie odnaleziono operatora");
+                Assert.That(taskLeader, Is.Not.Null, "Nie odnaleziono operatora");
 
                 var taskDefinition = Session.GetZadania().DefZadan.WgSymbolu["ZAD"];
-                Assert.IsNotNull(taskDefinition, "Nie znaleziono definicji");
+                Assert.That(taskDefinition, Is.Not.Null, "Nie znaleziono definicji");
 
                 var task = Add(new Zadanie()
                 {
@@ -92,7 +92,7 @@ namespace SonetaPartner.Tests.CRMTests
                 });
 
                 var projectDefinition = Session.GetZadania().DefProjektow.WgSymbolu["PRO"];
-                Assert.IsNotNull(projectDefinition, "Nie odnaleziono definicji PRO");
+                Assert.That(projectDefinition, Is.Not.Null, "Nie odnaleziono definicji PRO");
 
                 Add(new Projekt()
                 {
@@ -110,11 +110,11 @@ namespace SonetaPartner.Tests.CRMTests
         public void DodanieWypozyczeniaTest_Test()
         {
             var typUrzadzeniaDefinition = Session.GetZadania().TypyUrzadzen.wgSymbol["U"];
-            Assert.IsNotNull(typUrzadzeniaDefinition, "Nie odnaleziono nowej definicji typu urządzenia");
+            Assert.That(typUrzadzeniaDefinition, Is.Not.Null, "Nie odnaleziono nowej definicji typu urządzenia");
             var wypozyczenieDefinition = Session.GetZadania().DefZadan.WgSymbolu["WYPOŻ"];
             var fv = new DokumentHandlowy();
             var towar = Session.GetTowary().Towary.WgKodu["MONTAZ"];
-            Assert.IsNotNull(towar, "Nie odnaleziono Towaru");
+            Assert.That(towar, Is.Not.Null, "Nie odnaleziono Towaru");
 
             InUITransaction(() =>
             {
@@ -152,8 +152,8 @@ namespace SonetaPartner.Tests.CRMTests
             var urzadzenieDodanie = Session.GetZadania().Urzadzenia.WgNazwy["Urzadzenie 1"].FirstOrDefault();
             var modelDodanie = Session.GetZadania().ModeleUrz.WgSymbol["M1"].FirstOrDefault();
             var wypozyczenieDodanie = Session.GetZadania().Zadania.WgNazwy["Wypozyczenie"].FirstOrDefault();
-            Assert.AreEqual(modelDodanie, urzadzenieDodanie.ModelUrz, "Niepoprawny model urządzenia");
-            Assert.AreEqual("Wypozyczenie", wypozyczenieDodanie.Nazwa, "Brak wypozyczenia");
+            Assert.That(urzadzenieDodanie.ModelUrz, Is.EqualTo(modelDodanie), "Niepoprawny model urządzenia");
+            Assert.That(wypozyczenieDodanie.Nazwa, Is.EqualTo("Wypozyczenie"), "Brak wypozyczenia");
         }
 
         [Test]
@@ -248,9 +248,9 @@ namespace SonetaPartner.Tests.CRMTests
             var urzad = Session.GetCRM().UrzedySkarbowe.WgNazwy["Urzad"];
             var zus = Session.GetCRM().OddzialyZUS.WgNazwy["ZUS"];
 
-            Assert.AreEqual("B00001", bank.Kod, "Nieoprawny kod banku");
-            Assert.AreEqual("U00001", urzad.Kod, "Nieoprawny kod urzędu");
-            Assert.AreEqual("Z00001", zus.Kod, "Nieoprawny kod ZUS");
+            Assert.That(bank.Kod, Is.EqualTo("B00001"), "Nieoprawny kod banku");
+            Assert.That(urzad.Kod, Is.EqualTo("U00001"), "Nieoprawny kod urzędu");
+            Assert.That(zus.Kod, Is.EqualTo("Z00001"), "Nieoprawny kod ZUS");
         }
 
         [Test]
@@ -259,17 +259,17 @@ namespace SonetaPartner.Tests.CRMTests
             InUITransaction(() =>
             {
                 var task = Session.GetZadania().Zadania.WgNazwy["Zadanie Test"].FirstOrDefault();
-                Assert.IsNotNull(task, "Nie znaleziono zadania");
+                Assert.That(task, Is.Not.Null, "Nie znaleziono zadania");
 
                 var hireDefinition = Session.GetZadania().DefZadan.WgSymbolu["W"];
-                Assert.IsNotNull(hireDefinition, "Nie znaleziono definicji");
+                Assert.That(hireDefinition, Is.Not.Null, "Nie znaleziono definicji");
 
                 var taskRelated = new Zadanie() { Definicja = hireDefinition, Nazwa = "Wypożyczenie test" };
                 Add(taskRelated);
                 taskRelated.Nadrzedne = task;
 
                 var relatedSubject = Session.GetCRM().Kontrahenci.WgKodu["Aspen"];
-                Assert.IsNotNull(relatedSubject, "Nie znaleziono kontrahenta");
+                Assert.That(relatedSubject, Is.Not.Null, "Nie znaleziono kontrahenta");
 
                 var addRelatedSubject = new PodmiotZadanie();
                 addRelatedSubject.Kontrahent = relatedSubject;
@@ -277,7 +277,7 @@ namespace SonetaPartner.Tests.CRMTests
                 Add(addRelatedSubject);
 
                 var employee = Session.GetPracaHybrydowa().Kadry.Pracownicy.WgKodu["006"];
-                Assert.IsNotNull(employee, "Nie znaleziono pracownika");
+                Assert.That(employee, Is.Not.Null, "Nie znaleziono pracownika");
 
                 var addEmployee = new ZasobCRM();
                 addEmployee.Zadanie = task;
@@ -298,8 +298,8 @@ namespace SonetaPartner.Tests.CRMTests
                 addDocument.Dokument = fv;
                 addDocument.RodzajDokCRM = RodzajDokCRM.DokHandlowy;
 
-                Assert.AreEqual(task.DokumentyCRM.Count(), 1, "Błędna ilość dokumentów CRM");
-                Assert.AreEqual(task.ZadaniaPowiazane.Count(), 1, "Błędna ilość zadań powiązanych");
+                Assert.That(1, Is.EqualTo(task.DokumentyCRM.Count()), "Błędna ilość dokumentów CRM");
+                Assert.That(1, Is.EqualTo(task.ZadaniaPowiazane.Count()), "Błędna ilość zadań powiązanych");
             });
             SaveDispose();
         }
@@ -362,7 +362,7 @@ namespace SonetaPartner.Tests.CRMTests
 
             var worker =
                 Context.CreateObject(null, typeof(EmailElementWyslijEmailWorker), null) as EmailElementWyslijEmailWorker;
-            Assert.AreEqual(typeof(WiadomoscRobocza), worker?.NowaWiadomoscZSzablonem().GetType());
+            Assert.That(worker?.NowaWiadomoscZSzablonem().GetType(), Is.EqualTo(typeof(WiadomoscRobocza)));
         }
 
         [Test]
@@ -372,10 +372,10 @@ namespace SonetaPartner.Tests.CRMTests
             {
                 var def = ZadaniaModule.GetInstance(ConfigEditSession).DefZadan.GetFirstGranted() as DefZadania;
                 var copy = def.Copy() as DefZadania;
-                Assert.True(copy.Stany.All(x => def.Stany.Select(y => y.Nazwa).Contains(x.Nazwa)));
-                Assert.True(copy.Priorytety.All(x => def.Priorytety.Select(y => y.Nazwa).Contains(x.Nazwa)));
-                Assert.True(copy.Nazwa != def.Nazwa);
-                Assert.True(copy.Symbol != def.Symbol);
+                Assert.That(copy.Stany.All(x => def.Stany.Select(y => y.Nazwa).Contains(x.Nazwa)), Is.True);
+                Assert.That(copy.Priorytety.All(x => def.Priorytety.Select(y => y.Nazwa).Contains(x.Nazwa)), Is.True);
+                Assert.That(copy.Nazwa != def.Nazwa, Is.True);
+                Assert.That(copy.Symbol != def.Symbol, Is.True);
             });
         }
 
@@ -395,7 +395,7 @@ namespace SonetaPartner.Tests.CRMTests
             SaveDisposeConfig();
 
             var definition = Session.GetZadania().TypyUrzadzen.wgSymbol["TU1"];
-            Assert.IsNotNull(definition, "Nie odnaleziono nowej definicji typu urządzenia");
+            Assert.That(definition, Is.Not.Null, "Nie odnaleziono nowej definicji typu urządzenia");
 
             InUITransaction(() =>
             {
@@ -415,7 +415,7 @@ namespace SonetaPartner.Tests.CRMTests
 
             var urzadzenieAdded = Session.GetZadania().Urzadzenia.WgNazwy["Urzadzenie 1"].FirstOrDefault();
             var modelAdded = Session.GetZadania().ModeleUrz.WgSymbol["M1"].FirstOrDefault();
-            Assert.AreEqual(modelAdded, urzadzenieAdded.ModelUrz, "Niepoprawny model urządzenia");
+            Assert.That(urzadzenieAdded.ModelUrz, Is.EqualTo(modelAdded), "Niepoprawny model urządzenia");
         }
         
         [Test]
@@ -424,13 +424,13 @@ namespace SonetaPartner.Tests.CRMTests
             InTransaction(() =>
             {
                 var projectDefinition = Session.GetZadania().DefProjektow.WgSymbolu["PRO"];
-                Assert.IsNotNull(projectDefinition, "Nie odnaleziono definicji PRO");
+                Assert.That(projectDefinition, Is.Not.Null, "Nie odnaleziono definicji PRO");
 
                 var contractor = Session.GetCRM().Kontrahenci.WgKodu["Abc"];
-                Assert.IsNotNull(contractor, "Nie odnaleziono kontrahenta Abc");
+                Assert.That(contractor, Is.Not.Null, "Nie odnaleziono kontrahenta Abc");
 
                 var representative = Session.GetCRM().KontaktyOsoby.WgKontrahent[contractor].FirstOrDefault();
-                Assert.IsNotNull(representative, "Nie odnaleziono przedstawiciela Paszyński");
+                Assert.That(representative, Is.Not.Null, "Nie odnaleziono przedstawiciela Paszyński");
 
                 var toImplementation = projectDefinition.Stany.ToList().Where(x => x.Nazwa.StartsWith("Do realizacji")).FirstOrDefault();
                 var realized = projectDefinition.Stany.ToList().Where(x => x.Nazwa.StartsWith("Zrealizowane")).FirstOrDefault();
@@ -451,7 +451,7 @@ namespace SonetaPartner.Tests.CRMTests
                 project.DataOd = DateTime.Today.AddDays(1);
                 project.DataDo = DateTime.Today.AddDays(18);
 
-                Assert.AreEqual(contractor.Nazwa, project.Kontrahent.Nazwa, "Kontrahent nie jest przypisany");
+                Assert.That(project.Kontrahent.Nazwa, Is.EqualTo(contractor.Nazwa), "Kontrahent nie jest przypisany");
 
                 var addEmployee = new ZasobCRM();
                 addEmployee.Projekt = project;
@@ -468,9 +468,9 @@ namespace SonetaPartner.Tests.CRMTests
                 addEmail.WiadomoscEmail = emailMessage;
                 Add(addEmail);
 
-                Assert.AreEqual(employee.Kod, project.ZasobyCRM.Where(x => x.KodZasobu == "006").FirstOrDefault().KodZasobu, "Pracownik jest inny niż przypisywany");
-                Assert.AreEqual(deviceRelated.Nazwa, project.ZasobyCRM.Where(x => x.NazwaZasobu == "Urządzenie zd1").FirstOrDefault().NazwaZasobu, "Urządzenie jest inne niż przypisywane");
-                Assert.AreEqual(1, project.WiadomosciPowiazane.Count, "Brak wiadomości powiązanej");
+                Assert.That(project.ZasobyCRM.Where(x => x.KodZasobu == "006").FirstOrDefault().KodZasobu, Is.EqualTo(employee.Kod), "Pracownik jest inny niż przypisywany");
+                Assert.That(project.ZasobyCRM.Where(x => x.NazwaZasobu == "Urządzenie zd1").FirstOrDefault().NazwaZasobu, Is.EqualTo(deviceRelated.Nazwa), "Urządzenie jest inne niż przypisywane");
+                Assert.That(project.WiadomosciPowiazane.Count, Is.EqualTo(1), "Brak wiadomości powiązanej");
             });
             SaveDispose();
         }

@@ -67,7 +67,7 @@ namespace SonetaPartner.Tests.HandelTest
 			var worker = CreateContextRow(poz1, Context)
 			  .GetWorker<ObrotyTransakcjiWorker>();
 
-			Assert.AreEqual(worker.Marza, 900);
+            Assert.That(900, Is.EqualTo(worker.Marza));
 
 			var kzk2 = DokumentHandlowyAssembler.Korekta(zk2)
 			 .Pozycja(1)
@@ -79,7 +79,7 @@ namespace SonetaPartner.Tests.HandelTest
 
 			var worker2 = CreateContextRow(wz.Build(), Context)
 			  .GetWorker<ObrotyTransakcjiWorker>();
-			Assert.AreEqual(worker2.Marza, 800);
+            Assert.That(800, Is.EqualTo(worker2.Marza));
 		}
 	}
 }

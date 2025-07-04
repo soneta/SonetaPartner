@@ -28,7 +28,7 @@ namespace SonetaPartner.Tests.Assemblers
 							c++;
 						}
 					if (wymagana != decimal.MinValue)
-						Assert.AreEqual(wymagana, suma, $"{wypłata}, {opis}, elementy: {c}");
+                        Assert.That(suma, Is.EqualTo(wymagana), $"{wypłata}, {opis}, elementy: {c}");
 					else if (c > 0)
 						Assert.Fail($"Nieoczekiwany element {wypłata}, {opis}");
 				}

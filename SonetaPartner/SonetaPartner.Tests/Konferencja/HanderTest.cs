@@ -20,7 +20,7 @@ namespace SonetaPartner.Tests.Konferencja
 			var fv = Session.GetHandel().DokHandlowe
 				.WgDefinicja[Session.GetHandel().DefDokHandlowych.WgSymbolu["FV"]].ToArray();
 
-			Assert.IsTrue(fv.Count() == 0);
+            Assert.That(fv.Count() == 0, Is.True);
 
 			Nowy<DokumentHandlowy>()
 				.Data(Date.Today)
@@ -33,7 +33,7 @@ namespace SonetaPartner.Tests.Konferencja
 			fv = Session.GetHandel().DokHandlowe
 				.WgDefinicja[Session.GetHandel().DefDokHandlowych.WgSymbolu["FV"]].ToArray();
 
-			Assert.IsTrue(fv.Count() == 1);
+            Assert.That(fv.Count() == 1, Is.True);
 		}
 	}
 }
