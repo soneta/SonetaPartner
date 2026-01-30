@@ -10,5 +10,9 @@ namespace SonetaPartner.Tests.Assemblers
 		public static ProxyRecord<RelProceduraVAT> SetProceduraVAT(this ProxyRecord<RelProceduraVAT> row, ResolverProceduraVAT proceduraVAT)
 			=> row.InTransUI(λ => λ.Row.Procedura = proceduraVAT?.Resolve(λ));
 
+		public static ProxyRecord<DefinicjaDokumentu> SetTypDokumentuVAT(this ProxyRecord<DefinicjaDokumentu> row, ResolverProceduraVAT proceduraVAT)
+			=> row.InTransUI(λ => λ.Row.TypDokumentuVAT = proceduraVAT?.Resolve(λ));
+
+
 	}
 }

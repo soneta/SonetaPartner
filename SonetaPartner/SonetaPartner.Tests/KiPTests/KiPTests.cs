@@ -235,6 +235,72 @@ namespace SonetaPartner.Tests.KiPTests
                     .SprawdzDoWyplaty(3267.88m))
             .Build();
         }
-    }
+
+		[TestCase("2024-04-01", RodzajKosztowUzyskania.JedenStosPracy, RodzajKosztowUzyskania.JedenStosPracy, true, false, false, false)]
+		[TestCase("2024-04-01", RodzajKosztowUzyskania.JedenStosPracy, RodzajKosztowUzyskania.JedenStos25, false, false, true, false)]
+		[TestCase("2024-04-01", RodzajKosztowUzyskania.JedenStos25, RodzajKosztowUzyskania.JedenStosPracy, false, false, true, false)]
+		[TestCase("2024-04-01", RodzajKosztowUzyskania.JedenStos25, RodzajKosztowUzyskania.WiecejStosPracy, false, true, false, false)]
+		[TestCase("2024-04-01", RodzajKosztowUzyskania.WiecejStosPracy, RodzajKosztowUzyskania.JedenStos25, false, true, false, false)]
+		[TestCase("2024-04-01", RodzajKosztowUzyskania.WiecejStosPracy, RodzajKosztowUzyskania.WiecejStos25, false, false, false, true)]
+		[TestCase("2024-04-01", RodzajKosztowUzyskania.WiecejStos25, RodzajKosztowUzyskania.WiecejStosPracy, false, false, false, true)]
+		[TestCase("2024-11-01", RodzajKosztowUzyskania.JedenStosPracy, RodzajKosztowUzyskania.JedenStosPracy, true, false, false, false)]
+		[TestCase("2024-11-01", RodzajKosztowUzyskania.JedenStosPracy, RodzajKosztowUzyskania.JedenStos25, false, false, true, false)]
+		[TestCase("2024-11-01", RodzajKosztowUzyskania.JedenStos25, RodzajKosztowUzyskania.JedenStosPracy, false, false, true, false)]
+		[TestCase("2024-11-01", RodzajKosztowUzyskania.JedenStos25, RodzajKosztowUzyskania.WiecejStosPracy, false, true, false, false)]
+		[TestCase("2024-11-01", RodzajKosztowUzyskania.WiecejStosPracy, RodzajKosztowUzyskania.JedenStos25, false, true, false, false)]
+		[TestCase("2024-11-01", RodzajKosztowUzyskania.WiecejStosPracy, RodzajKosztowUzyskania.WiecejStos25, false, false, false, true)]
+		[TestCase("2024-11-01", RodzajKosztowUzyskania.WiecejStos25, RodzajKosztowUzyskania.WiecejStosPracy, false, false, false, true)]
+		public void PIT_11_zmiana_KUP(string dataakt, int rodzajkosztow1, int rodzajkosztow2,
+		bool djeden, bool dwiecej, bool djedenpodw, bool dwiecejpodw)
+		{
+
+			NowyTest()
+			.NowyPracownik("001")
+			.Zatrudnij("2023-1-1...", 10000)
+			.Enqueue(p => p.Last.Podatki.KosztyRodzaj = (RodzajKosztowUzyskania)rodzajkosztow1)
+			.Update(dataakt)
+			.Enqueue(ph => ph.Podatki.KosztyRodzaj = (RodzajKosztowUzyskania)rodzajkosztow2)
+			.Return()
+			.NaliczWyplaty("2024-01").Any().ForEach()
+			.NaliczWyplaty("2024-02").Any().ForEach()
+			.NaliczWyplaty("2024-03").Any().ForEach()
+			.NaliczWyplaty("2024-04").Any().ForEach()
+			.NaliczWyplaty("2024-05").Any().ForEach()
+			.NaliczWyplaty("2024-06").Any().ForEach()
+			.NaliczWyplaty("2024-07").Any().ForEach()
+			.NaliczWyplaty("2024-08").Any().ForEach()
+			.NaliczWyplaty("2024-09").Any().ForEach()
+			.NaliczWyplaty("2024-10").Any().ForEach()
+			.NaliczWyplaty("2024-11").Any().ForEach()
+			.NaliczWyplaty("2024-12").Any().ForEach()
+			.Utwórz();
+
+			NowyTest()
+			.Pracownik("001")
+			.NowyPIT<PIT11_29>(2024)
+				.SprawdzPole("D.Jeden", djeden)
+				.SprawdzPole("D.Wiecej", dwiecej)
+				.SprawdzPole("D.JedenPodw", djedenpodw)
+				.SprawdzPole("D.WiecejPodw", dwiecejpodw)
+				.Return()
+			.Build();
+		}
+
+		[TestCase(TypUmowyOPrace.NaCzasOkreślony)]
+		[TestCase(TypUmowyOPrace.NaOkresZastępstwa)]
+		public void OkresWypowiedzeniaPrzerwaWOkresieZatrudnienia(TypUmowyOPrace typUmowyOPrace)
+		{
+			NowyTest().
+			NowyPracownik("001").
+				Last().
+					Zatrudnij("2016-3-1...2016-12-31").
+					TypUmowyOPrace(typUmowyOPrace).
+					Enqueue(ph => {
+						ph.Etat.OkresWypowiedzenia.DataZlozenia = DateTime.Parse("2016-8-13");
+						Assert.That(ph.Etat.OkresWypowiedzenia.Tygodnie, Is.EqualTo(2));
+					}).
+			Utwórz();
+		}
+	}
 }
 

@@ -550,8 +550,20 @@ namespace SonetaPartner.Tests.KSTests
             wsw.WartoscPoczatkowaPodatkowa.Should().Be(new Currency(3600.00, "PLN"));
         }
 
+		[TestCase("ZR", SelectorProceduraVAT.Gr01)]
+		[TestCase("ZR", SelectorProceduraVAT.TypSprzedaz_WEW)]
+		[TestCase("SPT", SelectorProceduraVAT.Gr01)]
+		[TestCase("SPT", SelectorProceduraVAT.TypZakup_WEW)]
+		public void DefinicjaNiewlasciwyTypProceduryJPK(string symbolDef, SelectorProceduraVAT proceduraVAT)
+			=> GetFinder(true)
+				.DefinicjaDokumentu(symbolDef)
+				.Box()
+				.Invoking(λ => λ.SetTypDokumentuVAT(proceduraVAT))
+				.Should()
+				.Throw<RowException>()
+				.WithMessage("Niepoprawny typ procedury VAT*");
 
-        private ManagerKsiegowan.Rezultat GenerujBilansOtwarciaSalda(
+		private ManagerKsiegowan.Rezultat GenerujBilansOtwarciaSalda(
             ResolverOkres resolverOkres,
             GenerujBoSaldaParams.TrybGenerowania trybGenerowania = GenerujBoSaldaParams.TrybGenerowania.WgSyntetyk,
             string filtrKont = null)

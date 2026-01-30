@@ -463,11 +463,22 @@ namespace SonetaPartner.Tests.Extensions.Ksiegowosc.Engine
                 .ReturnChecked(() => $"Finder/RodzajPO/{nazwa}");
         }
 
-        #endregion
+		public VATEwidencja.DefEwidencjiVAT DefinicjaDokumentuVAT([NotNull] string symbol)
+		{
+			if (string.IsNullOrEmpty(symbol))
+				throw new ArgumentException(nameof(symbol));
 
-        #region collections
+			return (VATEwidencja.DefEwidencjiVAT)CoreModule()
+				.DefDokumentow
+				.WgSymbolu[symbol]
+				.ReturnChecked(() => $"Finder/DefinicjaDokumentuVAT/{symbol}");
+		}
 
-        public IEnumerable<DokEwidencji> DokumentyEwidencji(Func<DokEwidencji, bool> selector = null)
+		#endregion
+
+		#region collections
+
+		public IEnumerable<DokEwidencji> DokumentyEwidencji(Func<DokEwidencji, bool> selector = null)
             => CoreModule()
                 .DokEwidencja
                 .Cast<DokEwidencji>()

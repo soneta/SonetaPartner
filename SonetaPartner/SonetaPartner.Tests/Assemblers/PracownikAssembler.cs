@@ -60,7 +60,17 @@ namespace SonetaPartner.Tests.Assemblers
                 Assert.That(current, Is.EqualTo(StazPracy.Parse(_staż)), $"Staż pracy na dzień '{_data}'.");
             });
 
-    }
+		static public IRowBuilder<PracHistoria> Update(this IRowBuilder<Pracownik> builder, string data)
+		{
+			return builder.Update(Date.Parse(data));
+		}
+
+		static public IRowBuilder<PracHistoria> Update(this IRowBuilder<Pracownik> builder, Date data)
+		{
+			return builder.GetChild(pracownik => pracownik.Session.AddRow((PracHistoria)pracownik.Historia.Update(data)));
+		}
+
+	}
 
 	#endregion
 }

@@ -3,6 +3,7 @@ using Soneta.Types;
 using Soneta.Business;
 using Soneta.Kadry;
 using Soneta.Place;
+using System.Linq;
 
 namespace SonetaPartner.Tests.Assemblers
 {
@@ -38,7 +39,10 @@ namespace SonetaPartner.Tests.Assemblers
         static public IRowBuilder<DodHistoria> Ustaw(this IRowBuilder<DodHistoria> builder, string element = null, string okres = null, Currency? podstawa = null) {
             return builder.Enqueue(dh => {
                 if (element != null)
+                {
+                    var xxx = dh.Session.Get<PlaceModule>().DefElementow.Rows.ToArray();
                     dh.Element = dh.Session.Get<PlaceModule>().DefElementow.WgNazwy[element];
+                }
                 if (okres != null)
                     dh.Okres = FromTo.Parse(okres);
                 else if (dh.Okres == FromTo.Empty)
