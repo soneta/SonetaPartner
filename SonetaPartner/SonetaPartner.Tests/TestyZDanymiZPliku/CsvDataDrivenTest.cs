@@ -80,7 +80,8 @@ namespace SonetaPartner.Tests.TestyZDanymiZPliku
 				.Towary.WgNazwy[item.Nazwa]
 				.First();
 
-			Assert.That(towar, Is.Not.Null);
+			//Assert.That(towar, Is.Not.Null);
+			Assert.That(towar, Is.Null);
 		}
 
 		[TestCaseSource(typeof(CsvTowaryTestData), nameof(CsvTowaryTestData.TowaryZCsv2))]

@@ -1,0 +1,4 @@
+﻿Kod;NazwaFormatowana;EuVAT;Adres.KodPocztowyS;Adres.Miejscowosc;Adres.Poczta;Adres.Gmina;Adres.Powiat;Adres.Wojewodztwo;Adres.Ulica;Adres.NrDomu;Adres.NrLokalu;Adres.Telefon;Adres.Faks;Kontakt.TelefonKomorkowy;Kontakt.EMAIL;Kontakt.WWW;Rachunki:Class;Rachunki:Rachunek.Numer.Pełny;RabatTowaru;TypLimituKredytowego;LimitKredytu;SposobZaplaty:ID;Termin;Waluta:Symbol;RodzajPodmiotu;KodyKreskowe:Kod;Osoby:Nazwisko;Osoby:Imie
+Apis22;Apis22 sp. z o.o.;PL111-99-99-112;30-300;Kraków;Kraków;Kraków;Kraków;małopolskie;Leśna;12;1;12 222 22 22;012 222 22 22;603 603 603;info@enova.pl;www.enova.pl;RachunekBankowyKontrahenta;PL-78-12345678-1111 2222 3333 4444;10,00%;Kwota;500;2;14;PLN;Krajowy;;Kowalski;Jan
+Apex;Apex GmbH;DE333333333;;Berlin;;;;;Dortmunder Strasse;15;3;33 112 222 233;;;info2@enova.pl;www.enova2.pl;RachunekBankowyKontrahenta;;15,00%;Nieograniczony;;1;;EUR;Unijny;;;
+                            ;;;;;;;;;;;;;;;;;;;;;;;;;;;;

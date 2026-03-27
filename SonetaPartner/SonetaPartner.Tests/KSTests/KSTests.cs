@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Soneta.Business;
 using Soneta.Core;
+using Soneta.Deklaracje;
 using Soneta.EwidencjaVat;
 using Soneta.Kasa;
 using Soneta.Kasa.Extensions;
@@ -15,7 +16,10 @@ using SonetaPartner.Tests.Extensions.Ksiegowosc.Engine;
 using SonetaPartner.Tests.Extensions.Ksiegowosc.Selectors;
 using SonetaPartner.Tests.Extensions.Ksiegowosc.Settings;
 using SonetaPartner.Tests.Extensions.Ksiegowosc.Wrappers;
+using System;
+using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace SonetaPartner.Tests.KSTests
 {
@@ -562,6 +566,46 @@ namespace SonetaPartner.Tests.KSTests
 				.Should()
 				.Throw<RowException>()
 				.WithMessage("Niepoprawny typ procedury VAT*");
+
+		[Test]
+		public void ImportCsvBilansOtwarciaZDekretamiEwidencjaDokumentow()
+		{
+			string projectDir = Path.GetFullPath(
+				Path.Combine(AppContext.BaseDirectory, @"..\..\..\")
+			);
+			var resPath = Path.Combine(projectDir, "Res", "DataKS.csv");
+			string data = File.ReadAllText(resPath);
+
+			using (var stream = new MemoryStream(Encoding.Unicode.GetBytes(data)))
+			{
+				View view = Session.GetCore().DokEwidencja.CreateView();
+				view.Context = Context;
+				view.Context.Set(GetFinder().OkresObrachunkowy(Defaults.Okres));
+				view.Context.TryAdd(() => new Soneta.Kasa.OddzialParams(Context));
+
+				var reader = new SessionDataReader();
+				reader.DataSource = view;
+				reader.Format = SessionDataReaderFormat.Csv;
+				reader.Read(stream);
+			}
+
+			var dokument = GetFinder().DokumentyEwidencji().FirstOrDefault();
+			dokument.Typ.ToString().Should().Be("BOEwidencja");
+			dokument.DataDokumentu.Should().Be(TimeDefaults.Day(2024, 01, 01));
+			dokument.DataOperacji.Should().Be(TimeDefaults.Day(2024, 01, 01));
+			dokument.Opis.Should().Be("Opis dokumentu");
+
+			var dekret = dokument.Dekrety.ToArrayOfType<DekretBase>();
+			dekret[0].Caption.Should().Be("BO");
+			dekret[0].Data.Should().Be(TimeDefaults.Day(2024, 01, 01));
+			dekret[0].Opis.Should().Be("Opis dekretu");
+
+			var zapisy = dekret[0].Zapisy.ToList();
+			zapisy[0].Konto.Symbol.Should().Be("035-01");
+			zapisy[0].WinienOperacji.ToString().Should().Be("200,00 PLN");
+			zapisy[0].MaOperacji.ToString().Should().Be("0,00 PLN");
+			zapisy[0].Opis.Should().Be("Opis zapisu");
+		}
 
 		private ManagerKsiegowan.Rezultat GenerujBilansOtwarciaSalda(
             ResolverOkres resolverOkres,

@@ -1,23 +1,25 @@
-﻿using Soneta.Test;
+﻿using FluentAssertions;
 using NUnit.Framework;
-using System.Linq;
-using Soneta.Zadania;
-using Soneta.CRM;
-using Soneta.Handel;
-using System;
-using FluentAssertions;
 using Soneta.Business;
-using Soneta.Zadania.Podmioty_Zadania;
+using Soneta.Business.App;
 using Soneta.Business.Db;
 using Soneta.Core;
-using Soneta.Business.App;
-using SonetaPartner.Tests.Extensions.CRM.Engine;
+using Soneta.CRM;
+using Soneta.Handel;
 using Soneta.Magazyny;
-using Soneta.Towary;
 using Soneta.PracaZdalna;
+using Soneta.Test;
+using Soneta.Towary;
 using Soneta.Types;
-using SonetaPartner.Tests.Assemblers;
+using Soneta.Zadania;
+using Soneta.Zadania.Podmioty_Zadania;
 using Soneta.Zadania.Workers.Poczta;
+using SonetaPartner.Tests.Assemblers;
+using SonetaPartner.Tests.Extensions.CRM.Engine;
+using System;
+using System.IO;
+using System.Linq;
+using System.Text;
 
 
 namespace SonetaPartner.Tests.CRMTests
@@ -325,6 +327,66 @@ namespace SonetaPartner.Tests.CRMTests
             task.CzasDo.Should().Be(new TimeSec(Time.Now.Hours, Time.Now.Minutes, 0));
         }
 
+		[Test]
+		public void ImportCsvImportKontrahentowZDanymiKontaktowymi()
+		{
+			string projectDir = Path.GetFullPath(
+				Path.Combine(AppContext.BaseDirectory, @"..\..\..\")
+			);
+			var resPath = Path.Combine(projectDir, "Res", "KontrahentCrm.csv");
+			string data = File.ReadAllText(resPath);
+
+			using (var stream = new MemoryStream(Encoding.Unicode.GetBytes(data)))
+			{
+				View view = Session.GetCRM().Kontrahenci.CreateView();
+				view.Context = Context;
+
+				var reader = new SessionDataReader();
+				reader.DataSource = view;
+				reader.Format = SessionDataReaderFormat.Csv;
+				reader.Read(stream);
+			}
+
+			var kthWgNazwy1 = Session.GetCRM().Kontrahenci.WgNazwy["Apis22 sp. z o.o."].GetFirst();
+			kthWgNazwy1.Should().NotBeNull();
+			kthWgNazwy1.Kod.ToString().Should().Be("Apis22");
+			kthWgNazwy1.NazwaFormatowana.ToString().Should().Be("Apis22 sp. z o.o.");
+			kthWgNazwy1.EuVAT.ToString().Should().Be("PL111-99-99-112");
+			kthWgNazwy1.Adres.ToString().Should().Be("ul. Leśna 12/1 30-300 Kraków");
+			kthWgNazwy1.Adres.KodPocztowyS.ToString().Should().Be("30-300");
+			kthWgNazwy1.Adres.Miejscowosc.ToString().Should().Be("Kraków");
+			kthWgNazwy1.Adres.Poczta.ToString().Should().Be("Kraków");
+			kthWgNazwy1.Adres.Gmina.ToString().Should().Be("Kraków");
+			kthWgNazwy1.Adres.Powiat.ToString().Should().Be("Kraków");
+			kthWgNazwy1.Adres.Wojewodztwo.ToString().Should().Be("małopolskie");
+			kthWgNazwy1.Adres.Ulica.ToString().Should().Be("Leśna");
+			kthWgNazwy1.Adres.NrDomu.ToString().Should().Be("12");
+			kthWgNazwy1.Adres.NrLokalu.ToString().Should().Be("1");
+			kthWgNazwy1.Adres.Telefon.ToString().Should().Be("12 222 22 22");
+			kthWgNazwy1.Adres.Faks.ToString().Should().Be("012 222 22 22");
+			kthWgNazwy1.Kontakt.TelefonKomorkowy.ToString().Should().Be("603 603 603");
+			kthWgNazwy1.Kontakt.EMAIL.ToString().Should().Be("info@enova.pl");
+			kthWgNazwy1.Kontakt.WWW.ToString().Should().Be("http://www.enova.pl");
+			kthWgNazwy1.DomyslnyRachunek.Rachunek.Numer.Pełny.ToString().Should().Be("PL 78 1234 5678 1111 2222 3333 4444");
+			kthWgNazwy1.RabatTowaru.ToString().Should().Be("10,00%");
+			kthWgNazwy1.TypLimituKredytowego.ToString().Should().Be("Kwota");
+			kthWgNazwy1.LimitKredytu.ToString().Should().Be("500,00 PLN");
+			kthWgNazwy1.SposobZaplaty.ToString().Should().Be("Przelew");
+			kthWgNazwy1.Termin.Should().Be(14);
+			kthWgNazwy1.Waluta.ToString().Should().Be("PLN");
+			kthWgNazwy1.RodzajPodmiotu.ToString().Should().Be("Krajowy");
+
+			var osoby = kthWgNazwy1.Osoby.ToList();
+			osoby[0].Imie.ToString().Should().Be("Jan");
+			osoby[0].Nazwisko.ToString().Should().Be("Kowalski");
+
+			var kthWgNazwy2 = Session.GetCRM().Kontrahenci.WgNazwy["Apex GmbH"].GetFirst();
+			kthWgNazwy2.Should().NotBeNull();
+			kthWgNazwy2.Kod.ToString().Should().Be("Apex");
+			kthWgNazwy2.NazwaFormatowana.ToString().Should().Be("Apex GmbH");
+			kthWgNazwy2.EuVAT.ToString().Should().Be("DE333333333");
+		}
+		
         private Zadanie NewTask(string dateFrom, string dateTo, string timeFrom, string timeTo)
             => NewRow<Zadanie>()
                 .WithName("Zadanie")
@@ -474,7 +536,7 @@ namespace SonetaPartner.Tests.CRMTests
             });
             SaveDispose();
         }
-
+		
         private void AddFullRight(DefZadania defZadania)
         {
             var module = BusinessModule.GetInstance(defZadania);
